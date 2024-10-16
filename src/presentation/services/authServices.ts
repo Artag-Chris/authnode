@@ -1,4 +1,4 @@
-import { bcryptAdapter } from "../../config";
+import { bcryptAdapter, JwtAdapter } from "../../config";
 import { UserModel } from "../../data";
 import { CustomError, RegisterUserDto, UserEntity } from "../../domain";
 import { LoginUserDto } from "../../domain/dtos/auth/loginUser.dto";
@@ -48,12 +48,12 @@ public async loginUser( loginUserDto: LoginUserDto ) {
 
     const { password, ...userEntity} = UserEntity.fromObject( user );
     
-   // const token = await JwtAdapter.generateToken({ id: user.id, email: user.email });
-   // if ( !token ) throw CustomError.internalServer('Error while creating JWT');
+    const token = await JwtAdapter.generateToken({ id: user.id, email: user.email });
+    if ( !token ) throw CustomError.internalServer('Error while creating JWT');
 
     return {
       user: userEntity,
-      token: "token",
+      token: token,
     }
 
 
