@@ -1,3 +1,4 @@
+import { bcryptAdapter } from "../../config";
 import { UserModel } from "../../data";
 import { CustomError, RegisterUserDto, UserEntity } from "../../domain";
 
@@ -15,13 +16,15 @@ public async registerUser(registerUserDto:RegisterUserDto) {
     try {
         
      const user = new UserModel(registerUserDto);
-     await user.save();
-
-     const {password,...userEntity} = UserEntity.fromObject(user);
      //encriptar contraseña
+     user.password = bcryptAdapter.hash(registerUserDto.password);
+
+     
+     await user.save();
      //JWT <======= para mantener la autentificacion del usuario
      //Email de confirmacion 
-
+     
+     const {password,...userEntity} = UserEntity.fromObject(user);
      return {
         "user":userEntity,
         token: 'JWT',
