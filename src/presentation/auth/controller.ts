@@ -6,7 +6,8 @@ export class AuthController {
 constructor() {}
 
 registerUser= async (req:Request, res:Response, ) => {
-const registerUserDto = RegisterUserDto.create(req.body);
+const [error, registerUserDto] = RegisterUserDto.create(req.body);
+if(error) return res.status(400).json({error});
     res.json(registerUserDto);
 }
 
