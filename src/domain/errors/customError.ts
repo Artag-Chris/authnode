@@ -1,26 +1,33 @@
-export class CustomerError extends Error {
-  constructor(public readonly number: string, public readonly message: string) {
+
+
+
+export class CustomError extends Error {
+
+  constructor(
+    public readonly statusCode: number,
+    public readonly message: string,
+  ){
     super(message);
   }
 
-  //factory method for error handling
+  static badRequest(message: string) {
+    return new CustomError(400, message);
+  }
 
-static badRequest(message: string) {
-  return new CustomerError('400', message);
-}
-
-static unauthorized(message: string) {
-    return new CustomerError('401', message);
+  static unauthorized(message: string) {
+    return new CustomError(401, message);
   }
 
   static forbidden(message: string) {
-    return new CustomerError('403', message);
+    return new CustomError(403, message);
   }
+
   static notFound(message: string) {
-    return new CustomerError('404', message);
+    return new CustomError(404, message);
   }
+
   static internalServer(message: string) {
-    return new CustomerError('500', message);
+    return new CustomError(500, message);
   }
 
 
