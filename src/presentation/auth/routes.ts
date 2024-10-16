@@ -1,10 +1,9 @@
 import { Router } from 'express';
-import { AuthRoutes } from './auth/routes';
 
 
 
 
-export class AppRoutes {
+export class AuthRoutes {
 
 
   static get routes(): Router {
@@ -12,7 +11,10 @@ export class AppRoutes {
     const router = Router();
     
     // Definir las rutas
-    router.use('/api/auth', AuthRoutes.routes);
+    router.post(`/login`,)
+    router.post(`/register`,)
+
+    router.get(`/validate-email/:token`,)
 
 
 
@@ -21,4 +23,3 @@ export class AppRoutes {
 
 
 }
-
