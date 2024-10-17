@@ -20,15 +20,18 @@ public async registerUser(registerUserDto:RegisterUserDto) {
      //encriptar contraseña
      user.password = bcryptAdapter.hash(registerUserDto.password);
 
-     
-     await user.save();
      //JWT <======= para mantener la autentificacion del usuario
+     const token = await JwtAdapter.generateToken({ id: user.id });
+     if ( !token ) throw CustomError.internalServer('Error while creating JWT');
      //Email de confirmacion 
      
+
+     await user.save();
+
      const {password,...userEntity} = UserEntity.fromObject(user);
      return {
         "user":userEntity,
-        token: 'JWT',
+        token: token,
      }
 
     } catch (error) {
@@ -48,7 +51,7 @@ public async loginUser( loginUserDto: LoginUserDto ) {
 
     const { password, ...userEntity} = UserEntity.fromObject( user );
     
-    const token = await JwtAdapter.generateToken({ id: user.id, email: user.email });
+    const token = await JwtAdapter.generateToken({ id: user.id });
     if ( !token ) throw CustomError.internalServer('Error while creating JWT');
 
     return {
