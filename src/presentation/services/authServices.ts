@@ -91,7 +91,7 @@ public async loginUser( loginUserDto: LoginUserDto ) {
   }
 
   public validateEmail = async (token: string) => {
-console.log(token)
+
   const payload = await JwtAdapter.verifyToken(token);
   if (!payload) throw CustomError.unauthorized('Invalid token');
 
