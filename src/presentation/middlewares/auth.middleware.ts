@@ -1,5 +1,7 @@
 import { Response, Request, NextFunction } from "express";
 import { JwtAdapter } from "../../config";
+import { UserModel } from "../../data";
+import { UserEntity } from "../../domain";
 
 export class AuthMiddleware {
   static async validateJWT(req: Request, res: Response, next: NextFunction) {
@@ -14,7 +16,16 @@ export class AuthMiddleware {
 
     try {
         
-    const payload = await JwtAdapter.verifyToken(token);
+    const payload = await JwtAdapter.verifyToken<{ id: string }>(token);
+    if (!payload) return res.status(401).json({ error: "Invalid token" });
+    
+    const user = await UserModel.findById(payload.id);
+    if (!user) return res.status(401).json({ error: "User not found" });
+
+    req.body.user = UserEntity.fromObject(user);
+    //next controller or route
+    next();
+
 
     } catch (error) {
         console.log(error)
