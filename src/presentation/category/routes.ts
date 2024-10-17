@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { CategoryController } from './controller';
+import { AuthMiddleware } from '../middlewares/auth.middleware';
 
 
 
@@ -15,7 +16,9 @@ export class CategoryRoutes {
     
     // Definir las rutas
     router.get('/', controller.getCategories);
-    router.post('/', controller.createCategory);
+    //los middlewares son el segundo parámetro de las rutas y si hay varios se usan
+    //en un array, y gracias a el next() seguira el controllador
+    router.post('/', [AuthMiddleware.validateJWT],controller.createCategory);
 
 
 
