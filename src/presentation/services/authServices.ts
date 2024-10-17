@@ -1,13 +1,16 @@
-import { bcryptAdapter, JwtAdapter } from "../../config";
+import { bcryptAdapter, envs, JwtAdapter } from "../../config";
 import { UserModel } from "../../data";
 import { CustomError, RegisterUserDto, UserEntity } from "../../domain";
 import { LoginUserDto } from "../../domain/dtos/auth/loginUser.dto";
+import { EmailService } from "./emailService";
 
 
 export class AuthService {
 
 
-constructor() {}
+constructor(
+  private readonly emailService: EmailService
+) {}
 
 public async registerUser(registerUserDto:RegisterUserDto) {
 
@@ -24,7 +27,7 @@ public async registerUser(registerUserDto:RegisterUserDto) {
      const token = await JwtAdapter.generateToken({ id: user.id });
      if ( !token ) throw CustomError.internalServer('Error while creating JWT');
      //Email de confirmacion 
-     
+     await this.sendEmailValidationLink(user.email);
 
      await user.save();
 
@@ -63,6 +66,48 @@ public async loginUser( loginUserDto: LoginUserDto ) {
 
   }
 
+  private sendEmailValidationLink =async(email:string)=>{
+
+    const token = await JwtAdapter.generateToken({ email });
+    if ( !token ) throw CustomError.internalServer('Error while creating JWT');
+
+   const link=` ${envs.WEBSERVICE_URL}/auth/validate-email/=${token}`
+   const html = `
+   <h1>Validate your email</h1>
+   <p>Click to validate your email</p>
+   <a href="${link}">here</a>
+   `;
+
+  const options={
+    to:email,
+    subject:"Validate your email",
+    htmlBody:html
+  }
+
+  const isSent = await this.emailService.sendEmail(options);
+  if(!isSent) throw CustomError.internalServer('Error while sending email');
+  
+  return true
+  }
+
+  public validateEmail = async (token: string) => {
+console.log(token)
+  const payload = await JwtAdapter.verifyToken(token);
+  if (!payload) throw CustomError.unauthorized('Invalid token');
+
+
+  const { email } = payload as { email: string };
+  if (!email) throw CustomError.internalServer('Email not exist');
+
+  const user = await UserModel.findOne({ email });
+  if (!user) throw CustomError.internalServer('User not exist');
+
+  user.emailvalidated = true;
+
+  await user.save();
+  return true
+
+  }
 
 
 }
