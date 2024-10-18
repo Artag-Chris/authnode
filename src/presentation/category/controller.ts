@@ -1,11 +1,9 @@
-import { CreateCategoryDto, CustomError } from "../../domain";
+import { CreateCategoryDto, CustomError, PaginationDTO } from "../../domain";
 import { Request, Response } from "express";
 import { CategoryService } from "../services/categoryService";
 
 export class CategoryController {
-  constructor(
-    private readonly categoryService: CategoryService
-  ) {}
+  constructor(private readonly categoryService: CategoryService) {}
 
   private handleError = (error: unknown, res: Response) => {
     if (error instanceof CustomError) {
@@ -18,14 +16,23 @@ export class CategoryController {
   createCategory = (req: Request, res: Response) => {
     const [error, createCategoryDto] = CreateCategoryDto.create(req.body);
     if (error) return res.status(400).json({ error });
-   this.categoryService
+    this.categoryService
       .createCategory(createCategoryDto!, req.body.user)
       .then((category) => res.json(category))
       .catch((error) => this.handleError(error, res));
-
   };
 
   getCategories = async (req: Request, res: Response) => {
-    res.json("getCategory");
+    const {page=1,limit=10}=req.query;
+    const [error, paginationDto] = PaginationDTO.create(+page, +limit);
+    if (error) return res.status(400).json({ error });
+   
+    
+      this.categoryService
+        .getCategories(paginationDto!)
+        .then((categories) => res.json(categories))
+        .catch((error) => this.handleError(error, res));
+   
   };
+
 }
