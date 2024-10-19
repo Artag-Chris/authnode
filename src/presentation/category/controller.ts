@@ -20,7 +20,7 @@ export class CategoryController {
       .createCategory(createCategoryDto!, req.body.user)
       .then((category) => res.json(category))
       .catch((error) => this.handleError(error, res));
-  };
+  };  
 
   getCategories = async (req: Request, res: Response) => {
     const {page=1,limit=10}=req.query;
