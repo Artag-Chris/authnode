@@ -1,6 +1,5 @@
-//import { CreateProducDto, CustomError, PaginationDTO } from "../../domain";
+import { CreateProductDto, CustomError, PaginationDTO } from "../../domain";
 import { Request, Response } from "express";
-import { CustomError, PaginationDTO } from "../../domain";
 //import { ProducService } from "../services/ProducService";
 
 export class ProductController {
@@ -17,7 +16,7 @@ export class ProductController {
   };
 
   createProducts = (req: Request, res: Response) => {
-    // const [error, createProducDto] = CreateProducDto.create(req.body);
+     const [error, createProducDto] = CreateProductDto.create(req.body);
     // if (error) return res.status(400).json({ error });
     // this.producService
     //   .createProduc(createProducDto!, req.body.user)
@@ -27,9 +26,9 @@ export class ProductController {
   };  
 
   getProducts = async (req: Request, res: Response) => {
-    // const {page=1,limit=10}=req.query;
-    // const [error, paginationDto] = PaginationDTO.create(+page, +limit);
-    // if (error) return res.status(400).json({ error });
+     const {page=1,limit=10}=req.query;
+     const [error, paginationDto] = PaginationDTO.create(+page, +limit);
+     if (error) return res.status(400).json({ error });
    
     res.json("getProducts" );
      // this.producService

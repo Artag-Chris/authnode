@@ -16,9 +16,9 @@ export class AppRoutes {
     // Definir las rutas
     router.use('/api/auth', AuthRoutes.routes);
 
-    router.use('/categories',CategoryRoutes.routes)
+    router.use('/api/categories',CategoryRoutes.routes)
 
-    router.use('/products',ProductsRoutes.routes)
+    router.use('/api/products',ProductsRoutes.routes)
 
 
 
