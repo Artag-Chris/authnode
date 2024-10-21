@@ -24,7 +24,7 @@ try {
 
 }
 
-async getCategories(paginationDto:PaginationDTO) {
+async getProducts(paginationDto:PaginationDTO) {
 
     const {page,limit}=paginationDto;
 
@@ -47,7 +47,7 @@ async getCategories(paginationDto:PaginationDTO) {
         limit,
         total,
         next:`/api/produtcs?page=${page+1}&limit=${limit}`,
-        prev:(page -1>0)? `/api/categories?page=${page-1}&limit=${limit}`:null,
+        prev:(page -1>0)? `/api/produtcs?page=${page-1}&limit=${limit}`:null,
         products:products.map((product) => ({
             id: product.id,
             name: product.name,

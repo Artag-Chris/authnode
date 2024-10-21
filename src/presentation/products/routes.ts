@@ -1,8 +1,7 @@
 import { Router } from 'express';
-//import { ProductsController } from './controller';
 import { AuthMiddleware } from '../middlewares/auth.middleware';
 import { ProductController } from './controller';
-//import { ProductsService } from '../services/categoryService';
+import { ProductService } from "../services/productService";
 
 
 
@@ -14,8 +13,8 @@ export class ProductsRoutes {
   static get routes(): Router {
 
     const router = Router();
-   //const ProductsService = new ProductsService();
-    const controller = new ProductController();
+   const productsService = new ProductService();
+    const controller = new ProductController(productsService);
     
     // Definir las rutas
     router.get('/', controller.getProducts);
