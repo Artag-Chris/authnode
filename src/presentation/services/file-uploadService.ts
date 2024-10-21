@@ -6,13 +6,15 @@ export class FileUploadService {
   }
 
   uploadSingleFile = (
-    file: string,
+    file: any,
     folder: string = "uploads",
     validExtensions: string[] = ["png", "jpg", "jpeg", "gif"]
-  ) => {};
+  ) => {
+   
+  };
 
   uploadMultipleFiles = (
-    file: string[],
+    file: any[],
     folder: string = "uploads",
     validExtensions: string[] = ["png", "jpg", "jpeg", "gif"]
   ) => {};
