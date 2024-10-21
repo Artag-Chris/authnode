@@ -18,9 +18,8 @@ export class FileUploadRoutes {
     const controller = new FileUploadController();
     
     // Definir las rutas
-    router.get('/single/:type', controller.uploadFile);
-    //los middlewares son el segundo parámetro de las rutas y si hay varios se usan
-    //en un array, y gracias a el next() seguira el controllador
+    router.post('/single/:type', controller.uploadFile);
+    
     router.post('/multiple/:type', controller.uploadMultipleFiles);
 
 
