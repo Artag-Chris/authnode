@@ -14,7 +14,7 @@ export class ImageController {
     const { type = '', img = '' } = req.params;
 
     const imagePath = path.resolve( __dirname, `../../../uploads/${type}/${img}`);
-    console.log(imagePath);
+    
 
     if ( !fs.existsSync( imagePath ) ) {
       return res.status(404).send('Image not found')
