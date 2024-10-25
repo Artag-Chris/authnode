@@ -28,7 +28,7 @@ export class FileUploadController {
 
   
   
-    const file = req.files?.file as UploadedFile;
+    const file = req.body.files.at(0) as UploadedFile;
     console.log(file);  
     this.fileUploadService
       .uploadSingle(file, `uploads/${ type }`)
@@ -37,9 +37,14 @@ export class FileUploadController {
 
   };  
 
-uploadMultipleFiles = (req: Request, res: Response) => {
-    
-  res.json("Files uploaded");
-};
+  uploadMultileFiles = ( req: Request, res: Response ) => {
+    const type = req.params.type;
+    console.log('req.body.files:', req.body.files);
+    const files = req.body.files[0] as UploadedFile[];
+    console.log('files:', files);
+    this.fileUploadService.uploadMultiple( files, `uploads/${ type }` )
+      .then( uploaded => res.json(uploaded) )
+      .catch(  error => this.handleError( error, res ) )
+  };
 
 }
