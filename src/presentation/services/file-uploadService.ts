@@ -56,7 +56,6 @@ export class FileUploadService {
   ) {
     const fileNames = await Promise.all(
       files.map(async (file) => {
-        console.log(`File: ${file}`);
         return this.uploadSingle(file, folder, validExtensions);
       })
     );

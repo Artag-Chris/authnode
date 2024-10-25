@@ -18,18 +18,9 @@ export class FileUploadController {
   };
 
   uploadFile = (req: Request, res: Response) => {
-    
-   
     const type = req.params.type;
-    const validTypes = ["users", "products", "categories"];
-    if (!validTypes.includes(type)) {
-      return res.status(400).json({ error: `Invalid type : ${ type }, valid types: ${validTypes}` });
-    }
-
-  
-  
     const file = req.body.files.at(0) as UploadedFile;
-    console.log(file);  
+
     this.fileUploadService
       .uploadSingle(file, `uploads/${ type }`)
       .then((uploaded) => res.json(uploaded))
@@ -39,9 +30,8 @@ export class FileUploadController {
 
   uploadMultileFiles = ( req: Request, res: Response ) => {
     const type = req.params.type;
-    console.log('req.body.files:', req.body.files);
     const files = req.body.files[0] as UploadedFile[];
-    console.log('files:', files);
+    
     this.fileUploadService.uploadMultiple( files, `uploads/${ type }` )
       .then( uploaded => res.json(uploaded) )
       .catch(  error => this.handleError( error, res ) )
